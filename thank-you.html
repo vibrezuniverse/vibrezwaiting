@@ -78,13 +78,26 @@
 
   .logo {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    gap: 12px;
     margin-bottom: 72px;
   }
 
   .logo svg {
     width: min(190px, 52vw);
     height: auto;
+  }
+
+  .logo-tagline {
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--amber);
+    text-shadow: 0 0 18px rgba(255,191,0,0.34);
   }
 
   .eyebrow {
@@ -196,6 +209,7 @@
       <path d="M200.321 44.3809H190.77C190.084 47.2515 189.397 50.1222 188.71 52.9928C189.691 52.9887 190.671 52.9846 191.651 52.9805H198.259C199.296 52.9846 200.333 52.9887 201.37 52.9928C202.059 50.1222 202.748 47.2515 203.436 44.3809H200.321Z" fill="white"/>
       <path d="M194.348 17.0072L190.062 34.8835H192.882C192.937 34.8835 192.993 34.8836 193.05 34.8846L192.117 38.774L192.075 38.9874H204.731L210 17.0072H194.348Z" fill="white"/>
     </svg>
+    <div class="logo-tagline">SHARE THE PASSION</div>
   </div>
 
   <div class="eyebrow">Early access confirmed</div>

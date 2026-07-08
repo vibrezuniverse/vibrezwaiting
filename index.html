@@ -90,13 +90,27 @@
 
   .logo {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    gap: 12px;
     margin-bottom: 12vh;
   }
 
   .logo svg {
     width: 190px;
     height: auto;
+  }
+
+  .logo-tagline {
+    font-family: var(--font-body);
+    font-weight: 900;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: var(--amber);
+    text-shadow: 0 0 18px rgba(255,191,0,0.34);
   }
 
   .eyebrow {
@@ -163,6 +177,7 @@
   .d3 { color: var(--ice);        border-color: var(--ice);        box-shadow: 0 0 18px rgba(0,234,242,0.22); }
   .d4 { color: var(--malachite);  border-color: var(--malachite);  box-shadow: 0 0 18px rgba(45,235,80,0.20); }
   .d5 { color: var(--amber);      border-color: var(--amber);      box-shadow: 0 0 18px rgba(255,191,0,0.22); }
+  .d6 { color: var(--tangerine);  border-color: var(--tangerine);  box-shadow: 0 0 18px rgba(255,109,36,0.22); }
 
   form {
     display: flex;
@@ -298,6 +313,7 @@
       <path d="M200.321 44.3809H190.77C190.084 47.2515 189.397 50.1222 188.71 52.9928C189.691 52.9887 190.671 52.9846 191.651 52.9805H198.259C199.296 52.9846 200.333 52.9887 201.37 52.9928C202.059 50.1222 202.748 47.2515 203.436 44.3809H200.321Z" fill="white"/>
       <path d="M194.348 17.0072L190.062 34.8835H192.882C192.937 34.8835 192.993 34.8836 193.05 34.8846L192.117 38.774L192.075 38.9874H204.731L210 17.0072H194.348Z" fill="white"/>
     </svg>
+    <div class="logo-tagline">SHARE THE PASSION</div>
   </div>
 
   <div class="eyebrow">Early access waitlist</div>
@@ -311,10 +327,11 @@
 
   <div class="districts">
     <div class="district d1">Nightlife</div>
-    <div class="district d2">Sports</div>
-    <div class="district d3">eSports</div>
-    <div class="district d4">Music</div>
-    <div class="district d5">Creators</div>
+    <div class="district d2">Culture</div>
+    <div class="district d3">Sports</div>
+    <div class="district d4">eSports</div>
+    <div class="district d5">Music</div>
+    <div class="district d6">Creators</div>
   </div>
 
   <form action="/api/waitlist" method="POST" data-waitlist-form>
