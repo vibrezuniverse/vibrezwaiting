@@ -5,6 +5,7 @@ Static same-day landing page for the Vibrez early access waitlist.
 ## Files
 
 - `index.html` - production landing page
+- `thank-you.html` - post-signup confirmation page
 - `vibrez-bg.mp4` - autoplaying background video
 - `api/waitlist.js` - Vercel serverless waitlist signup endpoint
 - `db/waitlist.sql` - table schema used by the endpoint
@@ -25,8 +26,9 @@ Static same-day landing page for the Vibrez early access waitlist.
 4. Verify:
 
    - `/` loads the landing page.
+   - `/thank-you.html` loads the post-signup confirmation page locally. On Vercel, clean URLs expose it as `/thank-you`.
    - `/vibrez-bg.mp4` loads the background video.
-   - `POST /api/waitlist` stores an email in `waitlist_signups`.
+   - `POST /api/waitlist` stores an email in `waitlist_signups` and the form redirects successful signups to `/thank-you`.
    - Mobile layout is readable and does not overflow.
 
 5. Deploy on Vercel from the repository root.
