@@ -1,0 +1,12 @@
+{
+  "name": "vibrezwaiting",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "vercel deploy --prod --scope sayedbaharunprojects"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "1.1.0"
+  }
+}

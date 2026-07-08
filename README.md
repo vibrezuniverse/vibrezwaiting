@@ -6,29 +6,27 @@ Static same-day landing page for the Vibrez early access waitlist.
 
 - `index.html` - production landing page
 - `vibrez-bg.mp4` - autoplaying background video
+- `api/waitlist.js` - Vercel serverless waitlist signup endpoint
+- `db/waitlist.sql` - table schema used by the endpoint
 - `vercel.json` - static Vercel routing/config
 
 ## Launch Checklist
 
-1. Replace the form action in `index.html`:
+1. Attach a Vercel Postgres-compatible database and make `POSTGRES_URL` or `DATABASE_URL` available to production.
 
-   ```html
-   https://formspree.io/f/REPLACE_WITH_FORM_ID
-   ```
+2. The API auto-creates the `waitlist_signups` table on first signup. You can also run `db/waitlist.sql` manually.
 
-   with the real Formspree endpoint.
-
-2. Run a local static server from this folder:
+3. Run a local static server from this folder:
 
    ```bash
    python3 -m http.server 4173
    ```
 
-3. Verify:
+4. Verify:
 
    - `/` loads the landing page.
    - `/vibrez-bg.mp4` loads the background video.
-   - The waitlist form submits to Formspree.
+   - `POST /api/waitlist` stores an email in `waitlist_signups`.
    - Mobile layout is readable and does not overflow.
 
-4. Deploy on Vercel as a static project from the repository root.
+5. Deploy on Vercel from the repository root.

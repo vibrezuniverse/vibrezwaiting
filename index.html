@@ -214,6 +214,13 @@
     box-shadow: 0 6px 26px rgba(255,191,0,0.4);
   }
 
+  button:disabled {
+    cursor: wait;
+    opacity: 0.72;
+    transform: none;
+    box-shadow: none;
+  }
+
   button:active { transform: scale(0.98); }
 
   button:focus-visible {
@@ -225,6 +232,22 @@
     font-family: var(--font-body);
     font-size: 13px;
     color: var(--muted);
+    min-height: 1.4em;
+  }
+
+  .note.success { color: var(--lime); }
+  .note.error { color: var(--watermelon); }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .footer {
@@ -294,17 +317,58 @@
     <div class="district d5">Creators</div>
   </div>
 
-  <form action="https://formspree.io/f/REPLACE_WITH_FORM_ID" method="POST">
-    <input type="hidden" name="_subject" value="New Vibrez waitlist signup">
-    <input type="email" name="email" placeholder="you@email.com" required>
-    <button type="submit">Join the list</button>
+  <form action="/api/waitlist" method="POST" data-waitlist-form>
+    <label class="visually-hidden" for="waitlist-email">Email address</label>
+    <input id="waitlist-email" type="email" name="email" placeholder="you@email.com" autocomplete="email" required>
+    <button type="submit" data-waitlist-button>Join the list</button>
   </form>
 
-  <p class="note">No spam. One email when the gates open.</p>
+  <p class="note" data-waitlist-status aria-live="polite">No spam. One email when the gates open.</p>
 
   <div class="footer">© 2026 Vibrez Universe Pte. Ltd. · Singapore</div>
 
 </div>
 
+<script>
+  const waitlistForm = document.querySelector("[data-waitlist-form]");
+  const waitlistButton = document.querySelector("[data-waitlist-button]");
+  const waitlistStatus = document.querySelector("[data-waitlist-status]");
+
+  waitlistForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const formData = new FormData(waitlistForm);
+    const email = String(formData.get("email") || "").trim();
+
+    waitlistButton.disabled = true;
+    waitlistButton.textContent = "Joining...";
+    waitlistStatus.className = "note";
+    waitlistStatus.textContent = "Adding you to the list...";
+
+    try {
+      const response = await fetch(waitlistForm.action, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, source: "landing" })
+      });
+
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok || !payload.ok) {
+        throw new Error(payload.error || "Could not join the list right now.");
+      }
+
+      waitlistForm.reset();
+      waitlistStatus.className = "note success";
+      waitlistStatus.textContent = payload.message || "You're on the list. We'll email you when the gates open.";
+    } catch (error) {
+      waitlistStatus.className = "note error";
+      waitlistStatus.textContent = error.message || "Could not join the list right now.";
+    } finally {
+      waitlistButton.disabled = false;
+      waitlistButton.textContent = "Join the list";
+    }
+  });
+</script>
 </body>
 </html>
