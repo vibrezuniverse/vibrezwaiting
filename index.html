@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vibrez | The city that never logs off</title>
+<meta name="description" content="Vibrez is a social city built for play. Join the waitlist for early access to the first rooms.">
+<meta property="og:title" content="Vibrez | The city that never logs off">
+<meta property="og:description" content="A social city built for play. Explore themed districts, watch live events, and compete with friends.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@0,900;1,900&family=Lato:ital,wght@0,400;0,700;0,900;1,900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Vibrez brand tokens (DESIGN.md) */
+    --black: #090909;
+    --bg-alt: #121212;
+    --white: #FFFFFF;
+    --muted: #B7B7B7;
+    --border: #393A39;
+    --amber: #FFBF00;      /* primary spark */
+    --amber-hover: #FFCC33;
+    --lime: #D6FF00;       /* gradient partner */
+    /* secondary palette, used for the district chips */
+    --malachite: #2DEB50;
+    --tangerine: #FF6D24;
+    --sapphire: #2D4FEB;
+    --watermelon: #EB2D4E;
+    --ice: #00EAF2;
+
+    --font-headline: "Barlow Semi Condensed", "Arial Narrow", system-ui, sans-serif;
+    --font-body: "Lato", "Helvetica Neue", system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* background video layer, sits behind everything */
+  .bg-video {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  /* dark wash over the video so the text stays readable */
+  .bg-wash {
+    position: fixed;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(9,9,9,0.55) 0%, rgba(9,9,9,0.35) 40%, rgba(9,9,9,0.9) 100%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* soft amber/lime brand glow on the horizon */
+  .glow {
+    position: fixed;
+    inset: auto 0 -40vh 0;
+    height: 80vh;
+    background:
+      radial-gradient(ellipse 60% 45% at 35% 100%, rgba(255,191,0,0.16), transparent 70%),
+      radial-gradient(ellipse 55% 40% at 70% 100%, rgba(214,255,0,0.10), transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+    text-align: center;
+  }
+
+  .logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12vh;
+  }
+
+  .logo svg {
+    width: 190px;
+    height: auto;
+  }
+
+  .eyebrow {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: var(--font-headline);
+    font-weight: 900;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: clamp(40px, 8vw, 72px);
+    line-height: 1.07;
+    letter-spacing: 0.01em;
+    margin-bottom: 22px;
+  }
+
+  /* brand gradient (lime to amber) on the highlight word */
+  h1 .grad {
+    background: linear-gradient(90deg, var(--lime), var(--amber));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .sub {
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--muted);
+    max-width: 540px;
+    margin: 0 auto 44px;
+  }
+
+  /* district legend, each on a brand secondary colour */
+  .districts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 52px;
+  }
+
+  .district {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .d1 { color: var(--watermelon); border-color: var(--watermelon); box-shadow: 0 0 18px rgba(235,45,78,0.22); }
+  .d2 { color: var(--sapphire);   border-color: var(--sapphire);   box-shadow: 0 0 18px rgba(45,79,235,0.22); }
+  .d3 { color: var(--ice);        border-color: var(--ice);        box-shadow: 0 0 18px rgba(0,234,242,0.22); }
+  .d4 { color: var(--malachite);  border-color: var(--malachite);  box-shadow: 0 0 18px rgba(45,235,80,0.20); }
+  .d5 { color: var(--amber);      border-color: var(--amber);      box-shadow: 0 0 18px rgba(255,191,0,0.22); }
+
+  form {
+    display: flex;
+    gap: 10px;
+    max-width: 480px;
+    margin: 0 auto 14px;
+  }
+
+  input[type="email"] {
+    flex: 1;
+    min-width: 0;
+    padding: 15px 18px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--white);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+  }
+
+  input[type="email"]:focus {
+    border-color: var(--amber);
+    box-shadow: 0 0 0 3px rgba(255,191,0,0.25);
+  }
+
+  input::placeholder { color: var(--muted); }
+
+  /* primary CTA: amber pill, black text (brand invariant) */
+  button {
+    padding: 15px 28px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--amber);
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  button:hover {
+    background: var(--amber-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 26px rgba(255,191,0,0.4);
+  }
+
+  button:active { transform: scale(0.98); }
+
+  button:focus-visible {
+    outline: 2px solid var(--amber);
+    outline-offset: 3px;
+  }
+
+  .note {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .footer {
+    margin-top: 14vh;
+    font-family: var(--font-body);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: #707070;
+  }
+
+  @media (max-width: 520px) {
+    form { flex-direction: column; }
+    button { width: 100%; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    button { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================================================================ -->
+<!-- BACKGROUND VIDEO                                                  -->
+<!-- Put your downloaded clip in the SAME folder as this file and     -->
+<!-- name it exactly:  vibrez-bg.mp4                                   -->
+<!-- If the video is missing, the page still works and just shows the -->
+<!-- brand glow behind the text.                                       -->
+<!-- ================================================================ -->
+<video class="bg-video" autoplay muted loop playsinline poster="">
+  <source src="vibrez-bg.mp4" type="video/mp4">
+</video>
+<div class="bg-wash"></div>
+
+<div class="glow"></div>
+
+<div class="wrap">
+
+  <div class="logo">
+    <svg viewBox="0 0 210 70" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Vibrez">
+      <path d="M27.1068 17L16.2781 39.8728L15.2617 17H0L0.7938 34.8712H3.6855C3.9543 40.9142 4.2231 46.9571 4.49085 53H23.4328L40.4764 17H27.1068Z" fill="white"/>
+      <path d="M50.1102 52.9938C52.9861 40.9973 55.8621 29.0017 58.738 17.0062C53.5185 17.0062 48.2979 17.0062 43.0783 17.0062C41.6514 22.9588 40.2234 28.9114 38.7964 34.8651H41.7648C40.3158 40.908 38.8668 46.9509 37.4178 52.9938H50.1091H50.1102Z" fill="white"/>
+      <path d="M87.4314 33.7735C89.8685 32.0304 90.425 29.2274 90.677 28.0076C90.8355 27.236 90.888 26.5168 90.888 25.7966C90.888 20.9643 87.4482 17.0062 79.8284 17.0062H61.3526C59.9256 22.9588 58.4976 28.9114 57.0707 34.8641H60.0779C59.7734 36.1188 59.4689 37.3746 59.1644 38.6293L59.1476 38.6252L58.9806 39.3886C57.8981 43.9233 56.8145 48.4581 55.7319 52.9928C62.4005 52.9928 69.0701 52.9928 75.7386 52.9928C82.1951 52.9928 87.0104 49.8564 88.1748 44.0987C88.3334 43.4308 88.3859 42.7629 88.3859 42.094C88.3859 40.0308 87.5742 38.497 87.1815 37.8281C86.3258 36.3702 85.2338 35.4735 84.5544 34.9985C85.9782 34.7061 86.919 34.1397 87.4314 33.7735ZM78.918 30.3816C78.6818 30.5653 78.4445 30.7099 78.1788 30.8095C77.7735 30.9634 77.4375 30.9695 77.2097 30.9726C76.8422 30.9767 76.4369 30.9798 75.998 30.9798V30.988H73.6533L74.9501 25.6089H75.9969V25.6171C76.6542 25.6171 77.3126 25.6171 77.9699 25.6171C78.1977 25.654 78.665 25.7597 79.0944 26.1198C79.5974 26.5415 79.7507 27.0626 79.8242 27.3263C80.0982 28.3102 79.8609 29.647 78.9159 30.3816H78.918ZM75.7197 43.7407C75.4835 43.9243 75.2462 44.069 74.9805 44.1685C74.5752 44.3224 74.2392 44.3286 74.0114 44.3316C73.6439 44.3357 73.2386 44.3388 72.7997 44.3388V44.347H70.455L71.7518 38.9679H72.7986V38.9761C73.4559 38.9761 74.1143 38.9761 74.7716 38.9761C74.9994 39.0131 75.4667 39.1187 75.8961 39.4788C76.3991 39.9005 76.5524 40.4217 76.6259 40.6854C76.8999 41.6693 76.6626 43.0061 75.7176 43.7407H75.7197Z" fill="white"/>
+      <path d="M114.877 17.0072H95.928C94.5011 22.9598 93.0731 28.9124 91.6461 34.8651H94.6092C94.5546 35.0939 94.5 35.3216 94.4444 35.5504C93.05 41.3646 91.6566 47.1787 90.2622 52.9928H103.106L103.782 50.1724L106.466 38.9679C107.231 38.9679 107.997 38.9679 108.763 38.9679C108.781 38.97 108.806 38.973 108.837 38.9761C108.837 38.9761 108.948 38.9894 109.051 39.0059C109.42 39.0633 109.708 39.1546 109.708 39.1546C109.816 39.1885 109.938 39.2285 110.09 39.3024C110.219 39.3639 110.315 39.4245 110.362 39.4552C110.421 39.4922 110.48 39.5301 110.551 39.5866C110.603 39.6276 110.665 39.6809 110.756 39.7774C110.851 39.8759 110.959 39.9898 111.071 40.159C111.087 40.1826 111.232 40.4042 111.327 40.6782C111.473 41.0968 111.449 41.4897 111.421 41.8324C111.418 41.8693 111.416 41.9022 111.411 41.9524C111.411 41.9524 111.408 41.9924 111.404 42.0304C111.337 42.7537 111.114 43.556 111.114 43.556C110.954 44.1357 110.618 45.4653 110.154 47.2484C109.694 49.1629 109.234 51.0784 108.773 52.9928H120.168C120.896 49.9816 121.524 47.3736 121.98 45.4746C122.002 45.3822 122.258 44.3255 122.754 42.2089C122.789 42.0622 122.868 41.7165 122.865 41.2579C122.862 40.8649 122.801 40.5448 122.748 40.3355C122.748 40.3355 122.585 39.5558 122.053 38.2036C121.293 36.64 120.231 35.496 119.572 34.8651C120.338 34.7317 122.249 34.2946 123.875 32.6911C125.523 31.0639 125.911 29.21 126.064 28.42C126.097 28.2497 126.632 25.2754 125.12 22.4263C123.349 19.0817 119.357 17.0431 114.877 17.0072ZM113.709 30.4011C113.472 30.5858 113.235 30.7305 112.97 30.832C112.564 30.9859 112.228 30.9931 112 30.9962C111.633 31.0003 111.228 31.0034 110.789 31.0034V31.0116H108.444L109.741 25.6006H110.788V25.6088C111.445 25.6088 112.103 25.6088 112.761 25.6088C112.988 25.6458 113.456 25.7525 113.885 26.1146C114.388 26.5394 114.541 27.0626 114.615 27.3284C114.889 28.3184 114.652 29.6624 113.707 30.4011H113.709Z" fill="white"/>
+      <path d="M157.781 25.6078L159.845 17.0062H131.449L127.168 34.8641C128.153 34.8641 129.139 34.8641 130.126 34.8641C128.671 40.907 127.217 46.9509 125.762 52.9938H151.216C151.906 50.117 152.595 47.2392 153.285 44.3624C149.04 44.3624 144.795 44.3624 140.551 44.3624C140.982 42.5639 141.413 40.7664 141.844 38.9679C145.142 38.9679 148.439 38.9679 151.738 38.9679L153.648 31.0034H143.754C143.806 30.791 143.856 30.5786 143.908 30.3662C144.288 28.7801 144.668 27.195 145.048 25.6089H157.783L157.781 25.6078Z" fill="white"/>
+      <path d="M189.684 25.6078L191.746 17.0072H162.473L160.411 25.6088C163.344 25.6088 166.277 25.6088 169.211 25.6088C166.382 28.6939 163.553 31.779 160.725 34.8641C162.016 34.8641 163.309 34.8641 164.6 34.8641C161.707 38.0189 158.815 41.1737 155.922 44.3296C155.23 47.2177 154.537 50.1058 153.845 52.9928H185.76C186.451 50.114 187.142 47.2351 187.832 44.3563C182.718 44.3583 177.602 44.3604 172.488 44.3624C178.22 38.1112 183.952 31.86 189.684 25.6088V25.6078Z" fill="white"/>
+      <path d="M200.321 44.3809H190.77C190.084 47.2515 189.397 50.1222 188.71 52.9928C189.691 52.9887 190.671 52.9846 191.651 52.9805H198.259C199.296 52.9846 200.333 52.9887 201.37 52.9928C202.059 50.1222 202.748 47.2515 203.436 44.3809H200.321Z" fill="white"/>
+      <path d="M194.348 17.0072L190.062 34.8835H192.882C192.937 34.8835 192.993 34.8836 193.05 34.8846L192.117 38.774L192.075 38.9874H204.731L210 17.0072H194.348Z" fill="white"/>
+    </svg>
+  </div>
+
+  <div class="eyebrow">Early access waitlist</div>
+
+  <h1>The city that<br>never <span class="grad">logs off</span></h1>
+
+  <p class="sub">
+    A social city built for play. Explore themed districts, watch live events,
+    and compete with friends. Doors open soon. Get on the list.
+  </p>
+
+  <div class="districts">
+    <div class="district d1">Nightlife</div>
+    <div class="district d2">Sports</div>
+    <div class="district d3">eSports</div>
+    <div class="district d4">Music</div>
+    <div class="district d5">Creators</div>
+  </div>
+
+  <form action="https://formspree.io/f/REPLACE_WITH_FORM_ID" method="POST">
+    <input type="hidden" name="_subject" value="New Vibrez waitlist signup">
+    <input type="email" name="email" placeholder="you@email.com" required>
+    <button type="submit">Join the list</button>
+  </form>
+
+  <p class="note">No spam. One email when the gates open.</p>
+
+  <div class="footer">© 2026 Vibrez Universe Pte. Ltd. · Singapore</div>
+
+</div>
+
+</body>
+</html>
