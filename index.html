@@ -265,6 +265,22 @@
     border: 0;
   }
 
+  .privacy-note a,
+  .footer a {
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(183,183,183,0.35);
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .privacy-note a:hover,
+  .footer a:hover { color: var(--amber); border-bottom-color: var(--amber); }
+
+  .privacy-note a:focus-visible,
+  .footer a:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
+
+  .privacy-note { margin-top: 10px; opacity: 0.85; }
+
   .footer {
     margin-top: 14vh;
     font-family: var(--font-body);
@@ -342,7 +358,9 @@
 
   <p class="note" data-waitlist-status aria-live="polite">No spam. One email when the gates open.</p>
 
-  <div class="footer">© 2026 Vibrez Universe Pte. Ltd. · Singapore</div>
+  <p class="note privacy-note">We store your email in Singapore and delete it within 24 months. <a href="/privacy.html">How we handle your details</a>.</p>
+
+  <div class="footer">© 2026 Vibrez Universe Pte. Ltd. · Singapore · <a href="/privacy.html">Privacy</a></div>
 
 </div>
 
