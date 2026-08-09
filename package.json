@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "deploy": "vercel deploy --prod --scope sayedbaharunprojects"
+    "deploy": "vercel deploy --prod --scope vibrez1"
   },
   "dependencies": {
     "@neondatabase/serverless": "1.1.0"
